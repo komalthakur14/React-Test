@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { Alert, Button, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Alert,
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { emptyCart } from "./redux-store/slice/cartSlice";
-
-type Product = {
-  title: string;
-  quantity: number;
-  price: number;
-};
+import { Product } from "./Products";
 
 type CartProps = {
   products?: Product[];
@@ -45,13 +47,30 @@ function Cart({
               </ListItem>
             ))}
           </List>
-          <div>
-            Total Price:{" "}
-            {products.reduce(
-              (total, { price, quantity }) => total + price * quantity,
-              0
-            )}
-          </div>
+          {products.length > 0 && (
+            <>
+              <Box>
+                <Box sx={{ color: "gray" }}>
+                  Total Price:{" "}
+                  {products.reduce(
+                    (total, { price, quantity }) => total + price * quantity,
+                    0
+                  )}
+                </Box>
+                <Box>
+                  Discounted Price:{" "}
+                  {products
+                    .reduce(
+                      (total, { price, quantity, discountPercentage }) =>
+                        total +
+                        price * quantity * (1 - discountPercentage / 100),
+                      0
+                    )
+                    .toFixed(2)}
+                </Box>
+              </Box>
+            </>
+          )}
           {mode === "browse" ? (
             <Button
               style={{ marginBottom: 10 }}

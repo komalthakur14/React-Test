@@ -21,6 +21,7 @@ export type Product = {
   price: number;
   thumbnail: string;
   quantity: number;
+  discountPercentage: number;
 };
 
 type ProductListState = {
