@@ -1,10 +1,16 @@
-import React from 'react';
 import Cart from "./Cart";
+import { useSelector } from "react-redux";
+import { RootState } from "./redux-store/store";
 
 function Checkout() {
-    return (
-        <Cart text="Click Confirm Order to place your order" mode="confirm"></Cart>
-    )
+  const products = useSelector((state: RootState) => state.cart.items);
+  return (
+    <Cart
+      products={products}
+      text="Click Confirm Order to place your order"
+      mode="confirm"
+    ></Cart>
+  );
 }
 
 export default Checkout;

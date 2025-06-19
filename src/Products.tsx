@@ -11,8 +11,11 @@ import {
   Divider,
 } from "@mui/material";
 import Cart from "./Cart";
+import { connect } from "react-redux";
+import { addToCart } from "./redux-store/slice/cartSlice";
+import { RootState } from "./redux-store/store";
 
-type Product = {
+export type Product = {
   id: number;
   title: string;
   price: number;
@@ -25,10 +28,21 @@ type ProductListState = {
   productsInCart: Product[];
 };
 
-class ProductList extends React.Component<{}, ProductListState> {
+interface ReduxStateProps {
+  items: Product[];
+  total: number;
+}
+
+interface ReduxDispatchProps {
+  addToCart: (product: Product) => void;
+}
+
+type Props = ReduxStateProps & ReduxDispatchProps;
+
+class ProductList extends React.Component<Props, ProductListState> {
   state: ProductListState = {
     products: [],
-    productsInCart: [],
+    productsInCart: this.props.items,
   };
 
   componentDidMount() {
@@ -37,18 +51,15 @@ class ProductList extends React.Component<{}, ProductListState> {
       this.setState({ products });
     });
   }
-
   addToCart = (product: Product) => {
     const newProduct = { ...product, quantity: 1 };
-    this.setState((prevState) => ({
-      productsInCart: [...prevState.productsInCart, newProduct],
-    }));
+    this.props.addToCart(newProduct);
   };
 
   render() {
     return (
       <div>
-        <Cart products={this.state.productsInCart} />
+        <Cart products={this.props.items} />
         <Divider />
         <h1>Products</h1>
         <Grid
@@ -89,4 +100,10 @@ class ProductList extends React.Component<{}, ProductListState> {
   }
 }
 
-export default ProductList;
+export default connect(
+  (state: RootState) => ({
+    items: state.cart.items,
+    total: state.cart.total,
+  }),
+  { addToCart }
+)(ProductList);
