@@ -59,13 +59,16 @@ class ProductList extends React.Component<{}, ProductListState> {
           alignItems="center"
         >
           {this.state.products.map((product) => (
-            <Grid item key={product.id}>
+            <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
               <Card>
                 <CardMedia
                   component="img"
                   height="120"
                   image={product.thumbnail}
                   alt={product.title}
+                  sx={{
+                    objectFit: "contain",
+                  }}
                 />
                 <CardContent>
                   <Typography variant="h5" component="div">
