@@ -47,7 +47,10 @@ function Cart({
           </List>
           <div>
             Total Price:{" "}
-            {products.reduce((total, { price }) => total + price, 0)}
+            {products.reduce(
+              (total, { price, quantity }) => total + price * quantity,
+              0
+            )}
           </div>
           {mode === "browse" ? (
             <Button
